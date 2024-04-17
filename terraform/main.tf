@@ -12,7 +12,6 @@ terraform {
 
 provider "aws" {
   region  = var.region
-  version = "~>3.0"
 }
 
 resource "aws_instance" "app_server" {
