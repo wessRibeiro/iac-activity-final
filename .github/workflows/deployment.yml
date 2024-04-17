@@ -19,7 +19,7 @@ on:
           required: true
           description: aws session token.                  
 jobs:
-  tf_fmt:
+  terraform:
     name: Deploy Site
     runs-on: ubuntu-latest
     env:
@@ -28,16 +28,20 @@ jobs:
       TF_ACTION_WORKING_DIR: "./terraform"
     environment: ${{ inputs.environment }}
     steps:
-
     - name: Checkout Repo
       uses: actions/checkout@v1
     - name: echo env
-      run: echo GITHUB_ENV  
+      run: echo GITHUB_ENV
     - name: Terraform Init
-      uses: hashicorp/terraform-github-actions/init@v0.4.0
+      uses: hashicorp/terraform-github-actions@master
+      with:
+        tf_actions_version: 0.12.13
+        tf_actions_subcommand: 'init'
+        tf_actions_working_dir: ${{ vars.TF_ACTION_WORKING_DIR }}
+        tf_actions_comment: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TF_ACTION_WORKING_DIR: ${{ vars.TF_ACTION_WORKING_DIR }}
         AWS_ACCESS_KEY_ID:  ${{ inputs.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY:  ${{ inputs.AWS_SECRET_ACCESS_KEY }}
         AWS_SESSION_TOKEN:  ${{ inputs.AWS_SESSION_TOKEN }}
+        
