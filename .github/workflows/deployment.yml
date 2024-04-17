@@ -32,6 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       TF_LOG: INFO
     environment: ${{ inputs.environment }}
     defaults:
       run:
@@ -67,11 +68,11 @@ jobs:
       
       - name: Terraform Validate
         id: validate
-        run: terraform validate -no-color
+        run: terraform validate 
       
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan 
         continue-on-error: true
         
       - run: echo ${{ steps.plan.outputs.stdout }}
