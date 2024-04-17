@@ -60,7 +60,7 @@ jobs:
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
-        continue-on-error: true
+        continue-on-error: false
       
       - name: Terraform Init
         id: init
@@ -73,7 +73,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: terraform plan 
-        continue-on-error: true
+        continue-on-error: false
         
       - run: echo ${{ steps.plan.outputs.stdout }}
       - run: echo ${{ steps.plan.outputs.stderr }}
