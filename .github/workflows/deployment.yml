@@ -22,11 +22,16 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
+    env:
+      TF_ACTIONS_WORKING_DIR: 'terraform'
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
     steps:
       - uses: hashicorp/setup-terraform@v3
       - run: terraform init
 
-      - run: echo pwd
+      - run: echo $PWD
             
       - id: plan
         run: terraform plan 
