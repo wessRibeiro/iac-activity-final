@@ -18,15 +18,14 @@ on:
           type: string
           required: true
           description: aws session token.                  
-env:
-    TF_LOG: INFO
-    TF_INPUT: false
-    TF_ACTION_WORKING_DIR: './terraform'
-
 jobs:
   tf_fmt:
     name: Deploy Site
     runs-on: ubuntu-latest
+    env:
+      TF_LOG: INFO
+      TF_INPUT: false
+      TF_ACTION_WORKING_DIR: './terraform'
     environment: ${{ inputs.environment }}
     steps:
 
