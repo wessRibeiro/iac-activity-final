@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+
+    # Proxy requests to Docker container running on port 8080
+    ProxyPass / http://localhost:8080/
+    ProxyPassReverse / http://localhost:8080/
+    
+    ErrorLog ${APACHE_LOG_DIR}/{{ domain_name }}_error.log
+    CustomLog ${APACHE_LOG_DIR}/{{ domain_name }}_access.log combined
+</VirtualHost>

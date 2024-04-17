@@ -1,0 +1,126 @@
+- hosts: all
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+    - name: Install Apache2 and required utilities
+      become: true
+      apt: name={{ item }} update_cache=yes state=latest force_apt_get=yes
+      loop: [ 'apache2', 'apache2-doc', 'apache2-utils' ]
+      tags:
+        - apache-configs
+
+    - name: Enable Apache modules
+      become: true
+      apache2_module:
+        state: present
+        name: "{{ item }}"
+      loop: ['rewrite', 'headers', 'proxy', 'proxy_http']
+      tags:
+        - apache-configs
+    
+    - name: Create document root
+      file:
+        become: true
+        path: "/var/www/html/{{ http_host }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: '0755'
+      tags:
+        - setup-files-host
+    
+    - name: Copiar arquivo de template
+      become: true
+      template:
+        src: ../templates/your_domain.conf.j2
+        dest: /etc/apache2/sites-available/{{ http_conf }}
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: '0644'
+      vars:
+        - domain_name: "{{ http_host }}"
+        - document_root: "/var/www/html/{{ http_host }}"
+      tags:
+        - setup-files-host
+    
+      - name: add the {{ http_host }} site config
+      become: true
+      command: a2ensite {{ http_conf }}
+      notify: Reload Apache
+      tags:
+        - apache-configs
+
+    - name: Enable UFW firewall
+      become: true
+      command: ufw --force enable
+      tags:
+        - apache-configs
+
+    - name: Allow Apache Full, Apache, and OpenSSH through UFW
+      become: true
+      shell: ufw allow 'Apache Full' && ufw allow 'Apache' && ufw allow 'OpenSSH'
+      tags:
+        - apache-configs
+
+    - name: "UFW - Allow HTTP on port {{ http_port }}"
+      ufw:
+        rule: allow
+        port: "{{ http_port }}"
+        proto: tcp
+
+    - name: Disable the default site config
+      become: true
+      command: a2dissite 000-default.conf
+      when: disable_default
+      notify: Reload Apache
+
+    - name: Ensure Apache service is started and enabled
+    block:
+      - name: Ensure Apache service is started and enabled
+        become: true
+        systemd:
+          name: apache2
+          state: started
+          enabled: yes
+        register: apache_service_result
+      tags:
+        - apache-configs
+      - name: Print Apache service result
+        debug:
+          var: apache_service_result
+        tags:
+          - apache-configs
+
+    - name: Clone Voting App project
+      become: true
+      git:
+        repo: https://github.com/Azure-Samples/azure-voting-app-redis.git
+        dest: /var/www/html/{{ http_host }}
+        version: master
+      tags:
+        - git-install
+
+    - name: Change to project directory
+      shell: cd /var/www/html/{{ http_host }}
+      tags:
+        - git-install
+
+    - name: Run Docker Compose
+      become: true
+      shell: docker-compose up -d
+      args:
+        chdir: /var/www/html/{{ http_host }}
+      tags:
+        - git-install
+
+handlers:
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
+
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
