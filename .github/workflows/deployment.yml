@@ -52,7 +52,6 @@ jobs:
           aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ inputs.AWS_SESSION_TOKEN }}
           aws-region: ${{ inputs.AWS_REGION }}
-          role-to-assume: assumed-role/voclabs/user2942930=Weslley_Ribeiro_Leite_da_Silva
               
       - name: Setup terraform 
         uses: hashicorp/setup-terraform@v3
