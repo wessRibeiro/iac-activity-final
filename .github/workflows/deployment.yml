@@ -4,23 +4,28 @@ on:
     inputs:
       environment:
         type: string
-        #required: true
+        required: true
         description: Name of the target environment.    
       AWS_ACCESS_KEY_ID:
         type: string
-        #required: true
+        required: true
         description: aws key access.      
       AWS_SECRET_ACCESS_KEY:
         type: string
-        #required: true
+        required: true
         description: aws secret key access.                
       AWS_SESSION_TOKEN:
-          type: string
-         # required: true
-          description: aws session token.                  
+        type: string
+        required: true
+        description: aws session token.                  
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    env:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       AWS_ACCESS_KEY_ID:  ${{ inputs.AWS_ACCESS_KEY_ID }}
+       AWS_SECRET_ACCESS_KEY:  ${{ inputs.AWS_SECRET_ACCESS_KEY }}
+       AWS_SESSION_TOKEN:  ${{ inputs.AWS_SESSION_TOKEN }}
     environment: ${{ inputs.environment }}
     defaults:
       run:
@@ -28,8 +33,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
-      
-      - run: echo $PWD
       - run: terraform init      
       - id: plan
         run: terraform plan 
@@ -37,9 +40,5 @@ jobs:
       - run: echo ${{ steps.plan.outputs.stdout }}
       - run: echo ${{ steps.plan.outputs.stderr }}
       - run: echo ${{ steps.plan.outputs.exitcode }}
-      #env:
-       # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        #AWS_ACCESS_KEY_ID:  ${{ inputs.AWS_ACCESS_KEY_ID }}
-        #AWS_SECRET_ACCESS_KEY:  ${{ inputs.AWS_SECRET_ACCESS_KEY }}
-        #AWS_SESSION_TOKEN:  ${{ inputs.AWS_SESSION_TOKEN }}
+      
         
