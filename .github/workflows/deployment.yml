@@ -3,8 +3,10 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        type: string
+        type: choice
         required: true
+        options:
+          - production
         description: Name of the target environment.    
       AWS_ACCESS_KEY_ID:
         type: string
@@ -17,20 +19,32 @@ on:
       AWS_SESSION_TOKEN:
         type: string
         required: true
-        description: aws session token.                  
+        description: aws session token.
+      AWS_REGION:
+        type: choice
+        required: true
+        options:
+          - us-east-1
+        description: aws region.   
+        
 jobs:
   terraform:
     runs-on: ubuntu-latest
     env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       AWS_ACCESS_KEY_ID:  ${{ inputs.AWS_ACCESS_KEY_ID }}
-       AWS_SECRET_ACCESS_KEY:  ${{ inputs.AWS_SECRET_ACCESS_KEY }}
-       AWS_SESSION_TOKEN:  ${{ inputs.AWS_SESSION_TOKEN }}
     environment: ${{ inputs.environment }}
     defaults:
       run:
         working-directory: terraform
     steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ inputs.AWS_SESSION_TOKEN }}
+          aws-region: ${{ inputs.AWS_REGION }}
+          
       - name: Checkout code
         uses: actions/checkout@v4
         
