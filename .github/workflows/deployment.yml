@@ -28,10 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
-      - run: terraform init
-
+      
       - run: echo $PWD
-            
+      - run: terraform init      
       - id: plan
         run: terraform plan 
         
