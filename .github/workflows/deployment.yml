@@ -25,7 +25,7 @@ jobs:
     env:
       TF_LOG: INFO
       TF_INPUT: false
-      TF_ACTION_WORKING_DIR: "./terraform"
+      TF_ACTION_WORKING_DIR: "."
     environment: ${{ inputs.environment }}
     steps:
     - name: Checkout Repo
