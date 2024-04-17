@@ -8,12 +8,6 @@ terraform {
 
   required_version = ">= 0.14.9"
 
-  #backend "s3" {
-  #   bucket = var.bakend_s3_name
-  #  key    = var.bakend_s3_key
-  # region = var.region
-  # }
-
 }
 
 provider "aws" {
