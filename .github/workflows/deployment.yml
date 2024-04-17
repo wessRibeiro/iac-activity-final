@@ -36,7 +36,13 @@ jobs:
     defaults:
       run:
         working-directory: terraform
-    steps:
+    steps:    
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Use Node.js 
+        uses: actions/setup-node@v1  
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -44,13 +50,7 @@ jobs:
           aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ inputs.AWS_SESSION_TOKEN }}
           aws-region: ${{ inputs.AWS_REGION }}
-          
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Use Node.js 
-        uses: actions/setup-node@v1  
-        
+              
       - name: Setup terraform 
         uses: hashicorp/setup-terraform@v3
       
