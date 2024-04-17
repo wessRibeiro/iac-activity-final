@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.tfvars
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -214,15 +215,6 @@ csx/
 ecf/
 rcf/
 
-# Windows Store app package directories and files
-AppPackages/
-BundleArtifacts/
-Package.StoreAssociation.xml
-_pkginfo.txt
-*.appx
-*.appxbundle
-*.appxupload
-
 # Visual Studio cache files
 # files ending in .cache can be ignored
 *.[Cc]ache
@@ -260,24 +252,6 @@ UpgradeLog*.XML
 UpgradeLog*.htm
 ServiceFabricBackup/
 *.rptproj.bak
-
-# SQL Server files
-*.mdf
-*.ldf
-*.ndf
-
-# Business Intelligence projects
-*.rdl.data
-*.bim.layout
-*.bim_*.settings
-*.rptproj.rsuser
-*- [Bb]ackup.rdl
-*- [Bb]ackup ([0-9]).rdl
-*- [Bb]ackup ([0-9][0-9]).rdl
-
-# Microsoft Fakes
-FakesAssemblies/
-
 # GhostDoc plugin setting file
 *.GhostDoc.xml
 

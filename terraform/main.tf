@@ -2,32 +2,32 @@ terraform {
       required_providers {
         aws = {
           source  = "hashicorp/aws"
-          version = "~> 3.74.2"
+          version = var.terraform_provider_version
         }
       }
 
-      required_version = ">= 0.14.9"
+      required_version = var.terraform_provider_required_version
       
-      backend "s3" {
-          bucket = var.bakend_s3_name
-          key    = var.bakend_s3_key
-          region = var.region
-      }
+      #backend "s3" {
+       #   bucket = var.bakend_s3_name
+        #  key    = var.bakend_s3_key
+         # region = var.region
+     # }
 
     }
 
     provider "aws" {
-      region = var.region
-      version = "~>3.0"
+      region = var.aws_region
+      version = var.aws_version
     }
 
     resource "aws_instance" "app_server" {
-      ami = "ami-0fc5d935ebf8bc3bc"
-      instance_type = "t2.micro"
+      ami = var.ami
+      instance_type = var.instance_type
       key_name = var.key_name
 
       vpc_security_group_ids = [
-        "acesso_geral"
+        var.aws_security_group_name
       ] 
     }
 
@@ -37,8 +37,8 @@ terraform {
     }
 
     resource "aws_security_group" "acesso_geral" {
-      name = "acesso_geral"
-      description = "grupo do Dev"
+      name = var.aws_security_group_name
+      description = "grupo de seguranca padrao"
       ingress{
           cidr_blocks = [ "0.0.0.0/0" ]
           ipv6_cidr_blocks = [ "::/0" ]
@@ -54,6 +54,6 @@ terraform {
           protocol = "-1"
       }
       tags = {
-        Name = "acesso_geral"
+        Name = var.aws_security_group_name
       }
     }
