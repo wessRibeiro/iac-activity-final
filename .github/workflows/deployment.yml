@@ -4,25 +4,20 @@ on:
     inputs:
       environment:
         type: choice
-        required: true
         options:
           - production
         description: Name of the target environment.    
       AWS_ACCESS_KEY_ID:
         type: string
-        required: true
         description: aws key access.      
       AWS_SECRET_ACCESS_KEY:
         type: string
-        required: true
         description: aws secret key access.                
       AWS_SESSION_TOKEN:
         type: string
-        required: true
         description: aws session token.
       AWS_REGION:
         type: choice
-        required: true
         options:
           - us-east-1
         description: aws region.   
@@ -49,9 +44,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ inputs.AWS_SESSION_TOKEN }}
+          aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY_ID || vars.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY || vars.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ inputs.AWS_SESSION_TOKEN || vars.AWS_SESSION_TOKEN }}
           aws-region: ${{ inputs.AWS_REGION }}
       
       - name: Create .tfvars file
@@ -85,8 +80,11 @@ jobs:
       - name: Terraform Apply
         id: apply
         run: terraform apply --auto-approve=true
-
-      - run: echo ${{ steps.apply.outputs.ip }}  
+      
+      - name: Extract public IP
+        id: ip
+        run: echo "::set-output name=ip::$(terraform output -raw ip)"
+      - run: echo ${{ steps.ip.outputs.ip }}
+      - run: echo ${{ steps.apply.outputs.stdout.ip }}  
       - run: echo ${{ steps.apply.outputs.stdout }}
-      - run: echo ${{ steps.apply.outputs.stderr }}
       - run: echo ${{ steps.apply.outputs.exitcode }}  
