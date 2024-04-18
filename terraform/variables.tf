@@ -4,7 +4,7 @@ variable "aws_region" {
 }
 
 variable "aws_security_group_name" {
-    default = "grupo do wess"
+    default = "grupo_do_wess"
 }
 
 variable "ami" {
