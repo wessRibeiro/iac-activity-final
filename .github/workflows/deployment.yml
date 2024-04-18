@@ -64,12 +64,13 @@ jobs:
         run: terraform fmt 
         continue-on-error: false
       
-      - name: Terraform Init
-        id: init
-        run: terraform init \
-              -backend-config="bucket=${{ vars.BUCKET_NAME }}" \
-              -backend-config="key=terraform.tfstate" \
-              -backend-config="region=${{ inputs.AWS_REGION }}"
+     - name: Terraform Init
+       id: init
+       run: terraform init \
+          -backend-config="bucket=\"${{ vars.BUCKET_NAME }}\"" \
+          -backend-config="key=terraform.tfstate" \
+          -backend-config="region=\"${{ inputs.AWS_REGION }}\""
+
       
       - name: Terraform Validate
         id: validate
