@@ -85,4 +85,8 @@ jobs:
       - name: Terraform Apply
         id: apply
         run: terraform apply --auto-approve=true
-        
+
+      - run: echo ${{ steps.apply.outputs.ip }}  
+      - run: echo ${{ steps.apply.outputs.stdout }}
+      - run: echo ${{ steps.apply.outputs.stderr }}
+      - run: echo ${{ steps.apply.outputs.exitcode }}  
