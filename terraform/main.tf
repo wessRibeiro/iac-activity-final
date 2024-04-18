@@ -17,14 +17,14 @@ provider "aws" {
 resource "aws_instance" "app_server" {
   ami           = var.ami
   instance_type = var.instance_type
-  key_name      = var.key_name
+  key_name      = "minha_key_pair"
 
   vpc_security_group_ids = [
     var.aws_security_group_name
   ]
 }
 
-resource "aws_key_pair" "chaveSSH" {
+resource "aws_key_pair" "minha_key_pair" {
   key_name   = var.key_name
   public_key = var.public_key
 }
