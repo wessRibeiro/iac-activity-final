@@ -51,8 +51,7 @@ jobs:
         run: |
           aws s3api create-bucket \
             --bucket ${{ inputs.BUCKET_NAME || vars.BUCKET_NAME }} \
-            --region ${{ inputs.AWS_REGION }} \
-            --create-bucket-configuration LocationConstraint=${{ inputs.AWS_REGION }}
+            --region ${{ inputs.AWS_REGION }} 
 
       - name: Store bucket name in output
         id: bucket-name
