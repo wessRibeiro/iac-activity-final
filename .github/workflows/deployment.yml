@@ -56,7 +56,7 @@ jobs:
       
       - name: Create .tfvars file
         run: |
-          echo "public_key = \"$AWS_PUBLIC_KEY\"" > terraform.tfvars
+          echo "public_key = \"${{ vars.AWS_PUBLIC_KEY }}\"" > terraform.tfvars
           
       - name: Verify .tfvars file
         run: cat terraform.tfvars    
@@ -64,7 +64,7 @@ jobs:
       - name: Setup terraform 
         uses: hashicorp/setup-terraform@v3
       
-      - name: Terraform fmt
+      - name: Terraform fmt -check
         id: fmt
         run: terraform fmt 
         continue-on-error: false
@@ -81,9 +81,4 @@ jobs:
         id: plan
         run: terraform plan 
         continue-on-error: false
-        
-      - run: echo ${{ steps.plan.outputs.stdout }}
-      - run: echo ${{ steps.plan.outputs.stderr }}
-      - run: echo ${{ steps.plan.outputs.exitcode }}
-      
         
