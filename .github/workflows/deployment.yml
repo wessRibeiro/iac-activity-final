@@ -53,7 +53,14 @@ jobs:
           aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ inputs.AWS_SESSION_TOKEN }}
           aws-region: ${{ inputs.AWS_REGION }}
-              
+      
+      - name: Create .tfvars file
+        run: |
+          echo "public_key = \"$AWS_PUBLIC_KEY\"" > terraform.tfvars
+          
+      - name: Verify .tfvars file
+        run: cat terraform.tfvars    
+
       - name: Setup terraform 
         uses: hashicorp/setup-terraform@v3
       
