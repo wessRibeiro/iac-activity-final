@@ -22,3 +22,7 @@ variable "key_name" {
 variable "public_key" {
     default = ""
 }
+
+variable "bucket_name" {
+    default = ""
+}
