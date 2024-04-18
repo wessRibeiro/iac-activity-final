@@ -29,7 +29,7 @@ resource "aws_key_pair" "minha_key_pair" {
   public_key = var.public_key
 }
 
-resource "aws_security_group" "acesso_geral" {
+resource "aws_security_group" "grupo_do_wess" {
   name        = var.aws_security_group_name
   description = "grupo de seguranca padrao"
   ingress {
