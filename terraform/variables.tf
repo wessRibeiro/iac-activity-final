@@ -1,18 +1,12 @@
 
-variable "region" {
-
-}
-
 variable "aws_region" {
 
 }
+
 variable "aws_security_group_name" {
 
 }
 
-variable "aws_version" {
-
-}
 
 variable "terraform_provider_required_version" {
 
