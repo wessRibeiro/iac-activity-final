@@ -81,4 +81,7 @@ jobs:
         id: plan
         run: terraform plan 
         continue-on-error: false
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply 
         
