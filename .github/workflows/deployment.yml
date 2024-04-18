@@ -121,7 +121,7 @@ jobs:
         run: |
           ansible-playbook ubuntu/playbook.yml \
             -u ${{ vars.SSH_USER }} \
-            --private-key=${{ vars.AWS_PRIVATE_KEY }} \
+            --private-key="${{ vars.AWS_PRIVATE_KEY }}" \
             --extra-vars "ansible_host=${{ needs.terraform.outputs.PUBLIC_IP }}" \
             --ask-become-pass 
           
