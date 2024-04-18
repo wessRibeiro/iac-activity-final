@@ -35,7 +35,7 @@ jobs:
     steps:    
       - name: Checkout code
         uses: actions/checkout@v4
-      
+  
       - name: Use Node.js 
         uses: actions/setup-node@v4  
         with:
@@ -94,5 +94,32 @@ jobs:
         id: ip
         run: |
           echo "PUBLIC_IP=$(terraform output -raw ip)" >> $GITHUB_ENV
+  ansible:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    needs: terraform
+    defaults:
+      run:
+        working-directory: ansible
+    steps:    
+      - name: Checkout code
+        uses: actions/checkout@v4
         
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible
+
+      - name: Run Ansible playbook ubuntu
+        run: |
+          ansible-playbook ubuntu/playbook.yml \
+            -u ${{ vars.SSH_USER }} \
+            --private-key=${{ vars.AWS_PRIVATE_KEY }} \
+            --extra-vars "ansible_host=${{ vars.PUBLIC_IP }}" \
+            --ask-become-pass 
           
