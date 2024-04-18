@@ -92,5 +92,7 @@ jobs:
       
       - name: Extract public IP
         id: ip
-        run: echo $(terraform output -raw ip)
+        run: |
+          echo "PUBLIC_IP=$(terraform output -raw ip)" >> $GITHUB_ENV
         
+          

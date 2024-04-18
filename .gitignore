@@ -3,6 +3,7 @@
 ##
 /terraform/.terraform
 .terraform.lock.hcl
+/terraform/terraform.*
 *.rsuser
 *.suo
 *.pem
@@ -11,6 +12,7 @@
 *.userosscache
 *.sln.docstates
 *.tfvars
+/ansible/hosts
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
