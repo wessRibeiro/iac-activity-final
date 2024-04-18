@@ -1,0 +1,54 @@
+name: Create s3 bucket to be a backend terraform
+on:
+  workflow_dispatch:
+    inputs:
+      ENVIRONMENT:
+        type: choice
+        options:
+          - production
+        description: Name of the target environment.    
+      AWS_ACCESS_KEY_ID:
+        type: string
+        description: aws key access.      
+      AWS_SECRET_ACCESS_KEY:
+        type: string
+        description: aws secret key access.                
+      AWS_SESSION_TOKEN:
+        type: string
+        description: aws session token.
+      AWS_REGION:
+        type: choice
+        options:
+          - us-east-1
+        description: aws region.   
+      BUCKET_NAME:
+        type: string
+        description: aws bucket name.  
+        
+jobs:
+  create_terraform_backend:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    steps:    
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Use Node.js 
+        uses: actions/setup-node@v4  
+        with:
+          node-version: latest
+          
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY_ID || vars.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY || vars.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ inputs.AWS_SESSION_TOKEN || vars.AWS_SESSION_TOKEN }}
+          aws-region: ${{ inputs.AWS_REGION }}
+      
+      - name: Create S3 bucket
+        run: |
+          aws s3api create-bucket \
+            --bucket ${{ inputs.BUCKET_NAME || vars.BUCKET_NAME }} \
+            --region ${{ inputs.AWS_REGION }} 
