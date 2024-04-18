@@ -16,7 +16,7 @@ variable "instance_type" {
 }
 
 variable "key_name" {
-    default = "ssh-key-wess"
+    default = "minha_key_pair"
 }
 
 variable "public_key" {
