@@ -92,8 +92,5 @@ jobs:
       
       - name: Extract public IP
         id: ip
-        run: echo "::set-output name=ip::$(terraform output -raw ip)"
-      - run: echo ${{ steps.ip.outputs.ip }}
-      - run: echo ${{ steps.apply.outputs.stdout.ip }}  
-      - run: echo ${{ steps.apply.outputs.stdout }}
-      - run: echo ${{ steps.apply.outputs.exitcode }}  
+        run: echo $(terraform output -raw ip)
+        
