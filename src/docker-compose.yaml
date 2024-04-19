@@ -7,6 +7,8 @@ services:
       ALLOW_EMPTY_PASSWORD: "yes"
     ports:
         - "6379:6379"
+    volumes:
+      - /var/backups/redis_data:/bitnami/redis/data
 
   azure-vote-front:
     build: ./azure-vote
