@@ -119,7 +119,10 @@ jobs:
           
       - name: Create dynamic inventory
         run: echo "[ec2_instances]\n${{ needs.terraform.outputs.PUBLIC_IP }}" > hosts.ini
-
+      
+      - name: Verify hosts file
+        run: cat hosts.ini  
+        
       - name: Run Ansible playbook Ubuntu
         uses: appleboy/ansible-action@v2
         with:
