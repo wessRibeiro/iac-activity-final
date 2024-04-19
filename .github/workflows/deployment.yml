@@ -100,6 +100,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     needs: terraform
+    env:
+      ANSIBLE_HOST_KEY_CHECKING: False
     defaults:
       run:
         working-directory: ansible
@@ -118,13 +120,13 @@ jobs:
           pip install ansible
           
       - name: Create dynamic inventory
-        run: echo "[ec2_instances]\n${{ needs.terraform.outputs.PUBLIC_IP }}" > hosts.ini
+        run: echo "[ec2_instances] ${{ needs.terraform.outputs.PUBLIC_IP }}" > hosts.ini
       
       - name: Verify hosts file
         run: cat hosts.ini  
         
       - name: Run Ansible playbook Ubuntu
         run: |
-          ansible-playbook ubuntu/playbook.yml \
+          ansible-playbook -i hosts.ini ubuntu/playbook.yml \
             -u ${{ vars.SSH_USER }} \
             --private-key="${{ vars.AWS_PRIVATE_KEY }}" 
