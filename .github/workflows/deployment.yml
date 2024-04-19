@@ -137,3 +137,15 @@ jobs:
           ansible-playbook -i hosts.ini ubuntu/playbook.yml \
             -u ${{ vars.SSH_USER }} \
             --private-key="id_rsa.pem" 
+            
+      - name: Run Ansible playbook Docker
+        run: |
+          ansible-playbook -i hosts.ini docker/playbook.yml \
+            -u ${{ vars.SSH_USER }} \
+            --private-key="id_rsa.pem" 
+            
+      - name: Run Ansible playbook Apache
+        run: |
+          ansible-playbook -i hosts.ini apache/playbook.yml \
+            -u ${{ vars.SSH_USER }} \
+            --private-key="id_rsa.pem"       
