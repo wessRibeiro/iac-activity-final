@@ -129,7 +129,7 @@ jobs:
 
       - name: Create ssh private file
         run: |
-          echo  ${{ vars.AWS_PRIVATE_KEY }} > ~/.ssh/id_rsa.pem
+          echo  "${{ vars.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa.pem
           
       - name: Run Ansible playbook Ubuntu
         run: |
