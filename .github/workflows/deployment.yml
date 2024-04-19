@@ -116,12 +116,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install ansible
+          
+      - name: Create dynamic inventory
+        run: echo "[ec2_instances]\n${{ needs.terraform.outputs.PUBLIC_IP }}" > hosts.ini
 
-      - name: Run Ansible playbook ubuntu
-        run: |
-          ansible-playbook ubuntu/playbook.yml \
-            -u ${{ vars.SSH_USER }} \
-            --private-key="${{ vars.AWS_PRIVATE_KEY }}" \
-            --extra-vars "ansible_host=${{ needs.terraform.outputs.PUBLIC_IP }}" \
-            --ask-become-pass 
+      - name: Run Ansible playbook Ubuntu
+        uses: appleboy/ansible-action@v2
+        with:
+          playbook: ubuntu/playbook.yml
+          inventory: hosts.ini
+          extra-vars: |
+            ansible_user: ${{ vars.SSH_USER }}
+            ansible_ssh_private_key_file: ${{ vars.AWS_PRIVATE_KEY }}
           
