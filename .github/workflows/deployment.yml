@@ -126,9 +126,13 @@ jobs:
       
       - name: Verify hosts file
         run: cat hosts.ini  
-        
+
+      - name: Create ssh private file
+        run: |
+          echo  ${{ vars.AWS_PRIVATE_KEY }} > ~/.ssh/id_rsa.pem
+          
       - name: Run Ansible playbook Ubuntu
         run: |
           ansible-playbook -i hosts.ini ubuntu/playbook.yml \
             -u ${{ vars.SSH_USER }} \
-            --private-key="${{ vars.AWS_PRIVATE_KEY }}" 
+            --private-key="~/.ssh/id_rsa.pem" 
