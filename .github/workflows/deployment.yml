@@ -124,11 +124,7 @@ jobs:
         run: cat hosts.ini  
         
       - name: Run Ansible playbook Ubuntu
-        uses: appleboy/ansible-action@v2
-        with:
-          playbook: ubuntu/playbook.yml
-          inventory: hosts.ini
-          extra-vars: |
-            ansible_user: ${{ vars.SSH_USER }}
-            ansible_ssh_private_key_file: ${{ vars.AWS_PRIVATE_KEY }}
-          
+        run: |
+          ansible-playbook ubuntu/playbook.yml \
+            -u ${{ vars.SSH_USER }} \
+            --private-key="${{ vars.AWS_PRIVATE_KEY }}" 
