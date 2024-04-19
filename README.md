@@ -26,3 +26,4 @@ This project follows the architect's instructions below: https://drive.google.co
 ![image](https://github.com/wessRibeiro/iac-activity-final/assets/7069614/52c1ccc7-2e7a-41c1-abe6-855edd4eb2ae)
 
 ## Result:
+...
