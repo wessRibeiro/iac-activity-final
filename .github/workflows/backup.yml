@@ -1,4 +1,4 @@
-name: Schedule backup
+name: 3 - Schedule backup
 on:
   workflow_dispatch:
     inputs:
@@ -49,7 +49,7 @@ jobs:
           aws-region: ${{ inputs.AWS_REGION }}
       
       - name: Install SSH key
-        run: echo "${{ inputs.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+        run: echo "${{ vars.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
        
       #- name: Move backup folder to S3
        # run: |
