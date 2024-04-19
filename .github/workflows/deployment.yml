@@ -94,7 +94,7 @@ jobs:
       
       - name: Extract public IP
         id: ip
-        run: echo "::set-output name=ip::$(terraform output -raw ip)"
+        run: echo "ip=$(terraform output -raw ip)" >> "$GITHUB_ENV"
         
   ansible:
     runs-on: ubuntu-latest
