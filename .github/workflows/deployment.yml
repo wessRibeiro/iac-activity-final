@@ -1,4 +1,4 @@
-name: Deployment
+name: 2 - Deployment
 on:
   workflow_dispatch:
     inputs:
@@ -26,7 +26,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     outputs:
-      PUBLIC_IP: ${{ steps.ip.outputs.ip }}
+      PUBLIC_IP: ${{ env.ip }}
     env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        TF_LOG: INFO
@@ -94,7 +94,7 @@ jobs:
       
       - name: Extract public IP
         id: ip
-        run: echo "::set-output name=ip::$(terraform output -raw ip)"
+        run: echo "ip=$(terraform output -raw ip)" >> "$GITHUB_ENV"
         
   ansible:
     runs-on: ubuntu-latest

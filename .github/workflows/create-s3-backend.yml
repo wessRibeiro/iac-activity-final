@@ -1,4 +1,4 @@
-name: Create s3 bucket to be a backend terraform
+name: 1 - Create s3 bucket to be a backend terraform
 on:
   workflow_dispatch:
     inputs:
