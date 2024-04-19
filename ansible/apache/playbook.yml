@@ -95,16 +95,20 @@
 
     - name: Copy App
       become: true
-      shell: cp ../src /var/www/html/{{ http_host }}
-    
-    - name: Change to project directory
-      shell: cd /var/www/html/{{ http_host }}
+      git:
+        repo: https://github.com/wessRibeiro/iac-activity-final.git
+        dest: /var/www/html/{{ http_host }}
+        version: main
+      tags:
+        - git-install
 
     - name: Run Docker Compose
       become: true
       shell: docker-compose up -d
       args:
-        chdir: /var/www/html/{{ http_host }}
+        chdir: /var/www/html/{{ http_host }}/src
+      tags:
+        - git-install
 
   handlers:
     - name: Reload Apache
