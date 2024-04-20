@@ -5,6 +5,6 @@
     - name: Agendar backup
       cron:
         name: "Agendar Backup"
-        minute: "0"
-        hour: "3"
+        minute: "1"
+        hour: "0"
         job: "rsync -avz /var/www/html/iac-activity/src/docker/redis /var/backup/"
