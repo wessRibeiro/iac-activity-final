@@ -148,4 +148,10 @@ jobs:
         run: |
           ansible-playbook -i hosts.ini apache/playbook.yml \
             -u ${{ vars.SSH_USER }} \
+            --private-key="id_rsa.pem" 
+            
+      - name: Run Ansible playbook Backup
+        run: |
+          ansible-playbook -i hosts.ini backup/playbook.yml \
+            -u ${{ vars.SSH_USER }} \
             --private-key="id_rsa.pem"       
