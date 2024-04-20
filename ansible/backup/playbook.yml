@@ -7,4 +7,4 @@
         name: "Agendar Backup"
         minute: "1"
         hour: "0"
-        job: "rsync -avz /var/www/html/iac-activity/src/docker/redis /var/backups/"
+        job: "rsync -avz /var/www/html/wess.com/src/docker/redis /var/backups/"
