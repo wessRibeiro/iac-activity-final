@@ -1,0 +1,65 @@
+name: 3 - Schedule backup
+on:
+  workflow_dispatch:
+    inputs:
+      ENVIRONMENT:
+        type: choice
+        options:
+          - production
+        description: Name of the target environment.    
+      AWS_ACCESS_KEY_ID:
+        type: string
+        description: aws key access.      
+      AWS_SECRET_ACCESS_KEY:
+        type: string
+        description: aws secret key access.                
+      AWS_SESSION_TOKEN:
+        type: string
+        description: aws session token.
+      AWS_REGION:
+        type: choice
+        options:
+          - us-east-1
+        description: aws region.   
+      BUCKET_NAME:
+        type: string
+        description: aws bucket name.  
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:    
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 
+        uses: actions/setup-node@v4  
+        with:
+          node-version: latest
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY_ID || vars.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY || vars.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ inputs.AWS_SESSION_TOKEN || vars.AWS_SESSION_TOKEN }}
+          aws-region: ${{ inputs.AWS_REGION }}
+
+      - name: Create dynamic inventory
+        run: |
+          echo "[ec2_instances]" > hosts.ini
+          echo "" >> hosts.ini
+      
+      - name: Verify hosts file
+        run: cat hosts.ini  
+
+      - name: Create ssh private file
+        run: |
+          echo  "${{ vars.AWS_PRIVATE_KEY }}" > id_rsa.pem 
+          chmod 400 id_rsa.pem 
+          
+      - name: Run Ansible playbook Backup
+        run: |
+          ansible-playbook -i hosts.ini backup/playbook.yml \
+            -u ${{ vars.SSH_USER }} \
+            --private-key="id_rsa.pem" 
