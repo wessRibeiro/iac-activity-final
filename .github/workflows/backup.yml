@@ -48,7 +48,7 @@ jobs:
       - name: Create dynamic inventory
         run: |
           echo "[ec2_instances]" > hosts.ini
-          echo "" >> hosts.ini
+          echo "52.87.225.120" >> hosts.ini
       
       - name: Verify hosts file
         run: cat hosts.ini  
