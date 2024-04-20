@@ -7,7 +7,7 @@
         name: "Agendar Backup"
         minute: "1"
         job: "rsync -avz /var/www/html/wess.com/src/docker/redis /var/backups/"
-    - name: "Habilitar cron"
+    - name: Habilitar cron
       shell:  systemctl enable cron 
-    - name: "Start cron"
+    - name: Start cron
       shell:  systemctl start cron 
