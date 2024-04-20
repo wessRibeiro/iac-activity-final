@@ -18,4 +18,4 @@ services:
     environment:
       REDIS: azure-vote-back
     ports:
-        - "8085:80"
+        - "8080:80"
