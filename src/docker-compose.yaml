@@ -5,10 +5,11 @@ services:
     container_name: azure-vote-back
     environment:
       ALLOW_EMPTY_PASSWORD: "yes"
+      REDIS_VOLUME_DIR: bitnami/redis/data
     ports:
         - "6379:6379"
     volumes:
-      - /var/backups/redis_data:/bitnami/redis/data
+      - ./docker/redis:/bitnami/redis/data/
 
   azure-vote-front:
     build: ./azure-vote
@@ -17,4 +18,4 @@ services:
     environment:
       REDIS: azure-vote-back
     ports:
-        - "8080:80"
+        - "8085:80"

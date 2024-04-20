@@ -102,6 +102,14 @@
       tags:
         - git-install
 
+    - name: Enable volume redis
+      become: true
+      shell: chown -R 1001:1001 docker/redis/
+      args:
+        chdir: /var/www/html/{{ http_host }}/src
+      tags:
+        - git-install
+
     - name: Run Docker Compose
       become: true
       shell: docker-compose up -d

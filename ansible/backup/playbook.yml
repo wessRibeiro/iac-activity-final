@@ -1,0 +1,10 @@
+- name: Realizar Backup dos Dados Críticos
+  become: true
+  hosts: all
+  tasks:
+    - name: Agendar backup
+      cron:
+        name: "Agendar Backup"
+        minute: "0"
+        hour: "3"
+        job: "rsync -avz /var/www/html/iac-activity/src/docker/redis /var/backup/"
