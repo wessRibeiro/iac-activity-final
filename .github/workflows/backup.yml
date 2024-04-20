@@ -24,9 +24,6 @@ on:
       BUCKET_NAME:
         type: string
         description: aws bucket name.  
-
-  schedule:
-    - cron: '0 0 * * *'  # Executar o backup diariamente às 00:00 UTC
 jobs:
   backup:
     runs-on: ubuntu-latest
@@ -48,11 +45,21 @@ jobs:
           aws-session-token: ${{ inputs.AWS_SESSION_TOKEN || vars.AWS_SESSION_TOKEN }}
           aws-region: ${{ inputs.AWS_REGION }}
 
-      - name: Install SSH key
-        run: mkdir ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+      - name: Create dynamic inventory
+        run: |
+          echo "[ec2_instances]" > hosts.ini
+          echo "" >> hosts.ini
+      
+      - name: Verify hosts file
+        run: cat hosts.ini  
 
-      - run: echo "${{ vars.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-
-      #- name: Move backup folder to S3
-       # run: |
-        #  aws s3 cp /path/to/var/backup s3://${{ inputs.BUCKET_NAME }}/backup --recursive
+      - name: Create ssh private file
+        run: |
+          echo  "${{ vars.AWS_PRIVATE_KEY }}" > id_rsa.pem 
+          chmod 400 id_rsa.pem 
+          
+      - name: Run Ansible playbook Backup
+        run: |
+          ansible-playbook -i hosts.ini backup/playbook.yml \
+            -u ${{ vars.SSH_USER }} \
+            --private-key="id_rsa.pem" 
